@@ -1,0 +1,26 @@
+# rviz config file
+
+# Fixed Frame
+FixedFrame=map
+
+# Add RobotModel display
+RobotModel
+{
+  Enabled=true
+  Robot Description=robot_description
+}
+
+# Add LaserScan display
+LaserScan
+{
+  Enabled=true
+  Topic=/scan
+  Size (m)=0.1
+}
+
+# Add Map display
+Map
+{
+  Enabled=true
+  Topic=/map
+}
