@@ -1,0 +1,24 @@
+<launch>
+  <!-- Start the robot state publisher -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen">
+    <param name="robot_description" command="$(find xacro)/xacro '$(find m2wr_description)/urdf/m2wr.urdf'" />
+  </node>
+
+  <!-- Launch the GMapping node -->
+  <node name="slam_gmapping" pkg="gmapping" type="slam_gmapping" respawn="true" output="screen">
+    <param name="base_frame" value="link_chassis"/>
+    <param name="odom_frame" value="odom"/>
+    <param name="map_frame" value="map"/>
+    <param name="delta" value="0.1"/>
+    <param name="linearUpdate" value="0.1"/>
+    <param name="angularUpdate" value="0.1"/>
+    <param name="particles" value="30"/>
+    <param name="xmin" value="-10.0"/>
+    <param name="ymin" value="-10.0"/>
+    <param name="xmax" value="10.0"/>
+    <param name="ymax" value="10.0"/>
+  </node>
+
+  <!-- RViz for visualization -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find m2wr_description)/rviz/slam_config.rviz" />
+</launch>

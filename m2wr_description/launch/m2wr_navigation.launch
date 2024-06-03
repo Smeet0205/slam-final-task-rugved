@@ -1,0 +1,26 @@
+<launch>
+  <!-- Launch Gazebo with an empty world -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch"/>
+
+  <!-- Spawn the robot model into Gazebo -->
+  <arg name="urdf_file" default="$(find m2wr_description)/urdf/m2wr.urdf"/>
+  <param name="robot_description" command="$(find xacro)/xacro $(arg urdf_file)"/>
+  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+        args="-urdf -model m2wr -param robot_description"/>
+
+  <!-- Start the robot state publisher -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen">
+    <param name="robot_description" command="$(find xacro)/xacro '$(find m2wr_description)/urdf/m2wr.urdf'" />
+  </node>
+
+  <!-- Start the map server -->
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find m2wr_description)/maps/my_map.yaml" />
+
+  <!-- Start the navigation stack -->
+  <include file="$(find m2wr_description)/launch/amcl.launch" />
+  <include file="$(find m2wr_description)/launch/move_base.launch" />
+
+  <!-- RViz for visualization -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find m2wr_description)/rviz/slam_config.rviz" />
+</launch>
+
